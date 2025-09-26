@@ -1,0 +1,11 @@
+#Ignore vscode folder
+.vscode
+
+#Ignore build folder
+build/
+
+#Ignore object files
+*.o
+
+#Ignore main binary
+main
