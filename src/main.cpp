@@ -50,7 +50,6 @@ int main(int argc, char *argv[]){
   serverAddress.sin_addr.s_addr = INADDR_LOOPBACK;
 
   //Parse portNumber and add it to the serverAddress struct
-  portNumber = atoi(argv[1]);
   serverAddress.sin_port = htons(portNumber);
   
   std::cout << portNumber << std::endl;
