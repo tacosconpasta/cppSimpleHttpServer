@@ -1,9 +1,12 @@
 #pragma once
 #include <socket.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 class Server {
   private:
-  int portNumber;
+  sockaddr_in address;
   Socket connectionSocket;
   char buffer[256];
     
@@ -11,8 +14,14 @@ class Server {
   Server();
 
   public:
+  //Setters & Getters
   void setConnectionSocket(Socket socket);
-  int getPortNumber();
+  void setAddress(sockaddr_in addr);
   Socket getConnectionSocket();
+  sockaddr_in getAddress();
   char* getBuffer();
+
+  public:
+  int bindSocket();
+  int listen();
 };

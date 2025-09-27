@@ -1,5 +1,8 @@
 #pragma once
+#include <socket.h>
+#include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 class Socket {
   private: 
@@ -12,5 +15,6 @@ class Socket {
   public:
     void setFileDescriptor(int fd);
     int getFileDescriptor();
-    int bindSocket(struct sockaddr_in* address, socklen_t length);
+    int bindSocket(sockaddr_in* address, socklen_t length);
+    int openSocket();
 };

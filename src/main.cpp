@@ -3,10 +3,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <errno.h>
 
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <arpa/inet.h>
 
 int error(const char* msg){
   perror(msg);
@@ -50,23 +52,46 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
+  if(socket.getFileDescriptor() > 0)
+    server.setConnectionSocket(socket);
+
   //Structure that holds server address and port
   struct sockaddr_in serverAddress;
 
+  //Convert port from "host byte order" => "network byte order"
+  int portNumberNetByteOrder = htons(portNumber);
+
   //Set up the serverAddress
   serverAddress.sin_family = AF_INET;
-  serverAddress.sin_addr.s_addr = INADDR_LOOPBACK;
+  serverAddress.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+  serverAddress.sin_port = portNumberNetByteOrder;
 
-  //Parse portNumber and add it to the serverAddress struct
-  serverAddress.sin_port = htons(portNumber);
-  
-  std::cout << portNumber << std::endl;
+  //Set address to server
+  server.setAddress(serverAddress);
 
-  server.setConnectionSocket(socket);
+  //Print address details
+  sockaddr_in address = server.getAddress();
+
+  //Get IP address into a string
+  char ipStr[INET_ADDRSTRLEN];
+  inet_ntop(AF_INET, &address.sin_addr, ipStr, INET_ADDRSTRLEN);
+
+  std::cout << "Listening IP Address: " << ipStr << " Port#: " << ntohs(address.sin_port) << std::endl;
+
+  //Bind socket & print result of binding operation
+  int bindingResult = server.bindSocket();
+
+  if(bindingResult < 0){
+    std::cout << "Failed to bind socket: " << errno << std::endl;
+    return 1;
+  }
+
+  int listeningState = server.listen();
 
   Socket receivingSocket = server.getConnectionSocket();
 
-  std::cout << receivingSocket.getFileDescriptor() << std::endl;
-
+  std::cout << "Socket's Fd: " << receivingSocket.getFileDescriptor() << std::endl;
+  std::cout << "Binding result: " << bindingResult << std::endl;
+  std::cout << "Listening result: " << listeningState << std::endl;
   return 0;
 }

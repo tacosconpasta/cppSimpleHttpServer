@@ -2,6 +2,7 @@
 #include <socket.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 //Constructor for server class
 Socket::Socket(){};
@@ -24,8 +25,8 @@ void Socket::setFileDescriptor(int fd){
 int Socket::getFileDescriptor(){ return fileDescriptor; };
 
 //Socket binder with expected errors
-int Socket::bindSocket(struct sockaddr_in* address, socklen_t length){
-  int socketBindingResult = bind(fileDescriptor, (struct sockaddr*) address, length);
+int Socket::bindSocket(sockaddr_in* address, socklen_t length){
+  int socketBindingResult = bind(fileDescriptor, (sockaddr*) address, length);
 
   //If result is not 
   if(socketBindingResult == EADDRINUSE){
@@ -46,3 +47,7 @@ int Socket::bindSocket(struct sockaddr_in* address, socklen_t length){
 
   return socketBindingResult;
 };
+
+int Socket::openSocket(void){
+  return ::listen(fileDescriptor, 10);
+}

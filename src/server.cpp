@@ -8,13 +8,19 @@
 Server::Server(){
 };
 
+//Setters
 void Server::setConnectionSocket(Socket socket){
   connectionSocket = socket;
 };
 
-int Server::getPortNumber(){
-  return portNumber;
-};
+void Server::setAddress(sockaddr_in addr){
+  address = addr;
+}
+
+//Getters
+sockaddr_in Server::getAddress(){
+  return address;
+}
 
 Socket Server::getConnectionSocket(){
   return connectionSocket;
@@ -23,3 +29,14 @@ Socket Server::getConnectionSocket(){
 char* Server::getBuffer(){
   return buffer;
 };
+
+//Functional Methods
+
+//Calls bind socket
+int Server::bindSocket(void){
+  return connectionSocket.bindSocket(&address, sizeof(address));
+}
+
+int Server::listen(void){
+  return connectionSocket.openSocket();
+}
