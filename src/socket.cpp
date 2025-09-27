@@ -16,11 +16,10 @@ Socket::Socket(int domain, int type, int protocol){
 
 //File descriptors getters and setters
 void Socket::setFileDescriptor(int fd){ 
-  fileDescriptor = fd; 
-
-  if(fileDescriptor < 0){
-    throw std::runtime_error("Error trying to create file descriptor for socket. ::socket()'s result was negative.");
+  if(fd < 0){
+    throw std::runtime_error("Error trying to create file descriptor for socket. Provided file descriptor was negative.");
   }
+  fileDescriptor = fd; 
 };
 int Socket::getFileDescriptor(){ return fileDescriptor; };
 
