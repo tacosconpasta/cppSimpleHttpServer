@@ -34,13 +34,21 @@ int main(int argc, char *argv[]){
 
   //If PORT is not safe for "toying around" return; CHANGE THIS LINE AT OWN EXPENSE
   if (digits != 4 || portNumber < 1024 || portNumber > 9999) {
-      std::cerr << "Port Number is not safe for testing" << std::endl;
-      return 1;
+    std::cerr << "Port Number is not safe for testing" << std::endl;
+    return 1;
   }
 
-
-  Socket socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  Socket socket;
   Server server;
+
+  //Set the file descriptor for the socket.
+  try{
+    int fd = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    socket.setFileDescriptor(fd);
+  } catch (std::runtime_error &e){
+    std::cerr << "File Descriptor Exception: " << e.what() << std::endl;
+    return 1;
+  }
 
   //Structure that holds server address and port
   struct sockaddr_in serverAddress;

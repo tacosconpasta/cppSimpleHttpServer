@@ -10,12 +10,18 @@ Socket::Socket(){};
 Socket::Socket(int domain, int type, int protocol){
   fileDescriptor = ::socket(domain, type, protocol);
   if(fileDescriptor < 0){
-    std::runtime_error("Error trying to create file descriptor for socket.");
+    throw std::runtime_error("Error trying to create file descriptor for socket. ::socket()'s result was negative.");
   }
 };
 
 //File descriptors getters and setters
-void Socket::setFileDescriptor(int fd){ fileDescriptor = fd; };
+void Socket::setFileDescriptor(int fd){ 
+  fileDescriptor = fd; 
+
+  if(fileDescriptor < 0){
+    throw std::runtime_error("Error trying to create file descriptor for socket. ::socket()'s result was negative.");
+  }
+};
 int Socket::getFileDescriptor(){ return fileDescriptor; };
 
 //Socket binder with expected errors
