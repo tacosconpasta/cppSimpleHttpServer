@@ -83,5 +83,12 @@ int Server::listen(void){
 
   //Push client to clients list
   clients.push_back(client);
+
+  try{
+    operationStatus = connectionSocket.closeSocket();
+  } catch (std::runtime_error &e){
+    throw;
+  }
+
   return operationStatus;
 }
