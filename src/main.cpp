@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <list>
 #include <arpa/inet.h>
 
 int error(const char* msg){
@@ -96,6 +97,18 @@ int main(int argc, char *argv[]){
   } catch (std::runtime_error &e){
     std::cerr << "\nSocket listening exception: \n" << e.what() << '\n' << std::endl;
     return 1;
+  }
+
+  //Print ALL clients after ending execution
+  std::list<sockaddr_in> clients = server.getClients();
+
+  int clientNumber = 0;
+  for(sockaddr_in client : clients){
+    //Get IP address into a string
+    char ipStr[INET_ADDRSTRLEN];
+    inet_ntop(client.sin_family, &client.sin_addr, ipStr, INET_ADDRSTRLEN);
+
+    std::cout << "Client #" << clientNumber << "'s IP Address: "<< ipStr << std::endl;
   }
 
   return 0;

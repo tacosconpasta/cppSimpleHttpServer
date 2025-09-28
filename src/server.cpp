@@ -27,6 +27,10 @@ Socket Server::getConnectionSocket(){
   return connectionSocket;
 };
 
+std::list<sockaddr_in> Server::getClients(){
+  return clients;
+}
+
 char* Server::getBuffer(){
   return buffer;
 };

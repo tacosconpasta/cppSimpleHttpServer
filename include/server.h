@@ -21,6 +21,7 @@ class Server {
   void setAddress(sockaddr_in addr);
   Socket getConnectionSocket();
   sockaddr_in getAddress();
+  std::list<sockaddr_in> getClients();
   char* getBuffer();
 
   public:
