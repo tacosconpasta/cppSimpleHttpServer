@@ -9,6 +9,13 @@
 Server::Server(){
 };
 
+Server::~Server(){
+  //If socket is open, close.
+  if(connectionSocket.getFileDescriptor() >= 0){
+    connectionSocket.closeSocket();
+  }
+}
+
 //Setters
 void Server::setConnectionSocket(Socket socket){
   connectionSocket = socket;
