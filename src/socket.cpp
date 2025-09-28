@@ -51,3 +51,8 @@ int Socket::bindSocket(sockaddr_in* address, socklen_t length){
 int Socket::openSocket(void){
   return ::listen(fileDescriptor, 10);
 }
+
+int Socket::acceptRequests(sockaddr* user) {
+  socklen_t len = sizeof(*user);
+  return ::accept(fileDescriptor, user, &len);
+}

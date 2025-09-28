@@ -38,5 +38,19 @@ int Server::bindSocket(void){
 }
 
 int Server::listen(void){
-  return connectionSocket.openSocket();
+  int operationStatus;
+  operationStatus = connectionSocket.openSocket();
+
+  //If couldn't open socket
+  if(operationStatus < 0){
+    return operationStatus;
+  }
+
+  //Create an empty client
+  sockaddr_in client;
+
+  //Pass the empty client 
+  operationStatus = connectionSocket.acceptRequests((sockaddr*) &client);
+  clients.push_back(client);
+  return operationStatus;
 }

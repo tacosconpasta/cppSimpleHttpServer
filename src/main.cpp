@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
 
   //Set up the serverAddress
   serverAddress.sin_family = AF_INET;
-  serverAddress.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+  serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
   serverAddress.sin_port = portNumberNetByteOrder;
 
   //Set address to server

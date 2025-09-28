@@ -3,11 +3,13 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <list>
 
 class Server {
   private:
   sockaddr_in address;
   Socket connectionSocket;
+  std::list<sockaddr_in> clients;
   char buffer[256];
     
   public:

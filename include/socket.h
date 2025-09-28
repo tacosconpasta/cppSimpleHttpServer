@@ -17,4 +17,5 @@ class Socket {
     int getFileDescriptor();
     int bindSocket(sockaddr_in* address, socklen_t length);
     int openSocket();
+    int acceptRequests(sockaddr* user);
 };
