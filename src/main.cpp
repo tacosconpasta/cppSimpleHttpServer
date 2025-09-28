@@ -52,8 +52,10 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  if(socket.getFileDescriptor() > 0)
+  if(socket.getFileDescriptor() > 0) {
     server.setConnectionSocket(socket);
+    std::cout << "Socket's Fd: " << server.getConnectionSocket().getFileDescriptor() << std::endl;
+  }
 
   //Structure that holds server address and port
   struct sockaddr_in serverAddress;
@@ -79,19 +81,22 @@ int main(int argc, char *argv[]){
   std::cout << "Listening IP Address: " << ipStr << " Port#: " << ntohs(address.sin_port) << std::endl;
 
   //Bind socket & print result of binding operation
-  int bindingResult = server.bindSocket();
+  try {
+    int bindingResult = server.bindSocket();
+    std::cout << "Binding result: " << bindingResult << std::endl;
 
-  if(bindingResult < 0){
-    std::cout << "Failed to bind socket: " << errno << std::endl;
+  } catch (std::runtime_error &e){
+    std::cerr << "\nSocket bind exception: \n" << e.what() << '\n' << std::endl;
     return 1;
   }
 
-  int listeningState = server.listen();
+  try{
+    int listeningState = server.listen();
+    std::cout << "Listening result: " << listeningState << std::endl;
+  } catch (std::runtime_error &e){
+    std::cerr << "\nSocket listening exception: \n" << e.what() << '\n' << std::endl;
+    return 1;
+  }
 
-  Socket receivingSocket = server.getConnectionSocket();
-
-  std::cout << "Socket's Fd: " << receivingSocket.getFileDescriptor() << std::endl;
-  std::cout << "Binding result: " << bindingResult << std::endl;
-  std::cout << "Listening result: " << listeningState << std::endl;
   return 0;
 }
