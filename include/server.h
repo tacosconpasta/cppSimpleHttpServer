@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <list>
+#include <atomic>
 
 class Server {
   private:
@@ -27,5 +28,5 @@ class Server {
 
   public:
   int bindSocket();
-  int listen();
+  int listen(std::atomic<bool> &stopServerFlag);
 };

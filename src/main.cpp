@@ -9,14 +9,25 @@
 #include <string>
 #include <cmath>
 #include <list>
+#include <csignal>
+#include <atomic>
 #include <arpa/inet.h>
+
+std::atomic<bool> stopServer(false);
 
 int error(const char* msg){
   perror(msg);
   exit(1);
 }
 
+void handleSigTerm(int signal){
+  stopServer = true;
+  std::cout << "Terminate signal was received; shutting down after handling next user (should be fixed)" << std::endl;
+}
+
 int main(int argc, char *argv[]){
+  std::signal(SIGTERM, &handleSigTerm);
+  std::signal(SIGINT, &handleSigTerm);
   int portNumber;
 
   //If user doesnt input port number
@@ -92,7 +103,7 @@ int main(int argc, char *argv[]){
   }
 
   try{
-    int listeningState = server.listen();
+    int listeningState = server.listen(stopServer);
     std::cout << "Listening result: " << listeningState << std::endl;
   } catch (std::runtime_error &e){
     std::cerr << "\nSocket listening exception: \n" << e.what() << '\n' << std::endl;
