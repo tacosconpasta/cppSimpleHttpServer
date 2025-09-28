@@ -27,24 +27,6 @@ int Socket::getFileDescriptor(){ return fileDescriptor; };
 //Socket binder with expected errors
 int Socket::bindSocket(sockaddr_in* address, socklen_t length){
   int socketBindingResult = bind(fileDescriptor, (sockaddr*) address, length);
-
-  //If result is not 
-  if(socketBindingResult == EADDRINUSE){
-    throw std::runtime_error("The address is already in use.");
-  }
-
-  if(socketBindingResult == EADDRNOTAVAIL){
-    throw std::runtime_error("Address is not from local machine.");
-  }
-
-  if(socketBindingResult == EINVAL){
-    throw std::runtime_error("Socket already bound to an address.");
-  }
-
-  if(socketBindingResult == EROFS){
-    throw std::runtime_error("Socket can't be mounted on a read-only file system.");
-  }
-
   return socketBindingResult;
 };
 
