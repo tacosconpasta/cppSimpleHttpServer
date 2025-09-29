@@ -63,14 +63,14 @@ int Server::bindSocket(void){
 
 //Listens and makes the socket accept connections
 int Server::listen(std::atomic<bool> &stopServerFlag){
-  int operationStatus;
-  operationStatus = connectionSocket.openSocket();
+  int listenStatus;
+  listenStatus = connectionSocket.openSocket();
 
   //If couldn't open socket
-  if(operationStatus < 0){
+  if(listenStatus < 0){
     throw std::runtime_error(
       std::string("Couldn't make the socket listen correctly: ") +
-      std::to_string(operationStatus) + " Error Number: " +
+      std::to_string(listenStatus) + " Error Number: " +
       std::to_string(errno)
     );
   }
@@ -88,13 +88,13 @@ int Server::listen(std::atomic<bool> &stopServerFlag){
     //Or the errno is EINTR
     clientConnectionFd = connectionSocket.acceptRequests((sockaddr*)&client);
 
-    //If couldn't accept the request
-    if(clientConnectionFd < 0){
-      //If stop server
-      if (stopServerFlag)
-        break;
+    //If server already stopped, break;
+    if(stopServerFlag)
+      break;
 
-      //Else, throw an exception
+    //If couldn't accept the request, 
+    //means there's an error on system, regardless of what client sent
+    if(clientConnectionFd < 0){
       throw std::runtime_error(
         std::string("Socket isn't able to accept requests: ") +
         std::to_string(clientConnectionFd) + " Error Number: " +
@@ -118,10 +118,10 @@ int Server::listen(std::atomic<bool> &stopServerFlag){
   }
 
   try{
-    operationStatus = connectionSocket.closeSocket();
+    listenStatus = connectionSocket.closeSocket();
   } catch (std::runtime_error &e){
     throw;
   }
 
-  return operationStatus;
+  return listenStatus;
 }

@@ -90,18 +90,19 @@ int main(int argc, char *argv[]){
   char ipStr[INET_ADDRSTRLEN];
   inet_ntop(AF_INET, &address.sin_addr, ipStr, INET_ADDRSTRLEN);
 
-  std::cout << "Listening IP Address: " << ipStr << " Port#: " << ntohs(address.sin_port) << std::endl;
+  std::cout << "Listening IP Address: " << ipStr << " Port#: " << ntohs(address.sin_port) << '\n' <<std::endl;
 
   //Bind socket & print result of binding operation
   try {
     int bindingResult = server.bindSocket();
-    std::cout << "Binding result: " << bindingResult << std::endl;
+    std::cout << "Binding result: " << bindingResult << '\n' << std::endl;
 
   } catch (std::runtime_error &e){
     std::cerr << "\nSocket bind exception: \n" << e.what() << '\n' << std::endl;
     return 1;
   }
 
+  //Make the server listen and accept requests
   try{
     int listeningState = server.listen(stopServer);
     std::cout << "Listening result: " << listeningState << std::endl;
@@ -110,16 +111,17 @@ int main(int argc, char *argv[]){
     return 1;
   }
 
-  //Print ALL clients after ending execution
+  //Print ALL registered clients after ending execution
   std::list<sockaddr_in> clients = server.getClients();
 
   int clientNumber = 0;
   for(sockaddr_in client : clients){
-    //Get IP address into a string
+    //Get client's IP address into a string
     char ipStr[INET_ADDRSTRLEN];
     inet_ntop(client.sin_family, &client.sin_addr, ipStr, INET_ADDRSTRLEN);
 
     std::cout << "Client #" << clientNumber << "'s IP Address: "<< ipStr << std::endl;
+    clientNumber++;
   }
 
   return 0;
