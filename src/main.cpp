@@ -22,7 +22,6 @@ int error(const char* msg){
 
 void handleSigInt(int signal){
   stopServer = true;
-  std::cout << "Interrupt signal was received; shutting down after handling next user..." << std::endl;
 }
 
 int main(int argc, char *argv[]){

@@ -6,12 +6,14 @@
 #include <list>
 #include <atomic>
 
+static constexpr size_t BUFFER_SIZE = 8192;
+
 class Server {
   private:
   sockaddr_in address;
   Socket connectionSocket;
   std::list<sockaddr_in> clients;
-  char buffer[256];
+  char buffer[BUFFER_SIZE + 1];
     
   public:
   Server();

@@ -9,3 +9,6 @@ build/
 
 #Ignore main binary
 main
+
+#Ignore served html
+html/
