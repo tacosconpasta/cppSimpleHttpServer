@@ -20,15 +20,15 @@ int error(const char* msg){
   exit(1);
 }
 
-void handleSigTerm(int signal){
+void handleSigInt(int signal){
   stopServer = true;
-  std::cout << "Terminate signal was received; shutting down after handling next user (should be fixed)" << std::endl;
+  std::cout << "Interrupt signal was received; shutting down after handling next user..." << std::endl;
 }
 
 int main(int argc, char *argv[]){
-  std::signal(SIGTERM, &handleSigTerm);
-  std::signal(SIGINT, &handleSigTerm);
   int portNumber;
+
+  std::signal(SIGINT, &handleSigInt);
 
   //If user doesnt input port number
   if(argc < 2){
